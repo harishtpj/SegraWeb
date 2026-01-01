@@ -6,5 +6,9 @@ from .models import EcoCoinTransaction
 
 @login_required
 def transactions(req):
-    txns = EcoCoinTransaction.objects.filter(user=req.user).order_by("-created_at")
-    return render(req, "transactions.html", {"txns": txns})
+    txns = EcoCoinTransaction.objects.filter(user=req.user) \
+            .order_by("-created_at")
+
+    return render(req, "transactions.html", {
+        "txns": txns
+    })

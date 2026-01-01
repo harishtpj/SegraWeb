@@ -1,11 +1,43 @@
-<h1>Transaction History</h1>
+{% extends "base.html" %}
 
-<ul>
-    {% for t in transactions %}
-    <li>{{ t.created_at }} | {{ t.waste_type }} | {{ t.coins }}</li>
-    {% empty %}
-    <li>No transactions yet</li>
-    {% endfor %}
-</ul>
+{% block title %}Transactions - Segra{% endblock %}
 
-<a href="/dashboard/">Back</a>
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">EcoCoin Transactions</h1>
+
+<div class="card bg-base-100 shadow">
+    <div class="card-body">
+
+        {% if txns %}
+            <div class="overflow-x-auto">
+                <table class="table table-zebra">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Waste Type</th>
+                            <th>Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in txns %}
+                        <tr>
+                            <td>{{ t.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{{ t.waste_type }}</td>
+                            <td class="font-semibold text-success">
+                                +{{ t.coins }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-sm opacity-70">
+                No transactions yet.
+            </p>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+

@@ -1,15 +1,104 @@
-<h1>Welcome {{ user.username }}</h1>
+{% extends "base.html" %}
 
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+{% block title %}Dashboard - Segra{% endblock %}
 
-<p>EcoCoins: {{ user.ecocoin_balance }}</p>
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">
+    Welcome,
+    <span class="text-success">
+        {{ user.get_full_name }}
+    </span>!
+</h1>
 
-<h2>Transactions</h2>
-<ul>
-    {% for t in transactions %}
-    <li>{{ t.created_at }} | {{ t.waste_type }} | {{ t.coins }}</li>
-    {% endfor %}
-</ul>
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">EcoCoins</h2>
+            <p class="text-4xl font-bold text-success">
+                {{ user.ecocoin_balance }}
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">Today’s Disposals</h2>
+            <p class="text-4xl font-bold">
+                {{ today_count }} / {{ daily_limit }}
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">Trust Score</h2>
+            <p class="text-4xl font-bold text-success">
+                {{ trust_score }} %
+            </p>
+            <p class="text-xs opacity-70">
+                Based on consistent usage
+            </p>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow">
+        <div class="card-body">
+            <h2 class="card-title">EcoDrives</h2>
+            <p class="text-lg">
+                {% if clubs %}
+                    Member of {{ clubs|length }} club{{ clubs|length|pluralize }}
+                {% else %}
+                    Not part of any EcoDrive
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Recent Transactions -->
+<div class="card bg-base-100 shadow">
+    <div class="card-body">
+        <h2 class="card-title mb-4">Recent Transactions</h2>
+
+        {% if txns %}
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Waste Type</th>
+                            <th>Coins</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in txns %}
+                        <tr>
+                            <td>{{ t.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{{ t.waste_type }}</td>
+                            <td class="font-semibold text-success">
+                                +{{ t.coins }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+		<div class="mt-4 text-right">
+		    <a href="{% url 'transactions' %}" class="link link-primary">
+			View all transactions →
+		    </a>
+		</div>
+            </div>
+        {% else %}
+            <p class="text-sm opacity-70">
+                No transactions yet.
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

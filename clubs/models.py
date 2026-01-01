@@ -6,7 +6,7 @@ User = settings.AUTH_USER_MODEL
 class Club(models.Model):
     name = models.CharField(max_length=100)
     desc = models.TextField()
-    members = models.ManyToManyField(User, blank=True)
+    members = models.ManyToManyField(User, blank=True, related_name="clubs")
 
 class EcoDrive(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE)

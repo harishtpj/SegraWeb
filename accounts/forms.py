@@ -5,9 +5,24 @@ from django import forms
 User = get_user_model()
 
 class RegistrationForm(UserCreationForm):
+    first_name = forms.CharField(
+            max_length=30,
+            required=True,
+            widget=forms.TextInput(attrs={
+                'class': 'input input-bordered w-full',
+            })
+    )
+
+    last_name = forms.CharField(
+            max_length=30,
+            required=True,
+            widget=forms.TextInput(attrs={
+                'class': 'input input-bordered w-full',
+            })
+    )
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("first_name", "last_name", "username", "email")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
