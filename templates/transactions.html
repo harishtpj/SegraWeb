@@ -1,0 +1,11 @@
+<h1>Transaction History</h1>
+
+<ul>
+    {% for t in transactions %}
+    <li>{{ t.created_at }} | {{ t.waste_type }} | {{ t.coins }}</li>
+    {% empty %}
+    <li>No transactions yet</li>
+    {% endfor %}
+</ul>
+
+<a href="/dashboard/">Back</a>

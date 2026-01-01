@@ -23,12 +23,11 @@ from .views import about, index
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Home routes
-    path("", index, name="index"),
-    path("about/", about, name="about"),
-    # User management routes
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
-    # Account Management routes
+    path("", index, name="index"),
+    path("about/", about, name="about"),
     path("", include("accounts.urls")),
+    path("", include("ecocoins.urls")),
+    path("", include("clubs.urls")),
 ]
