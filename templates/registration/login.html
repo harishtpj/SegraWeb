@@ -1,22 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Segra Login</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>Login</h1>
+{% block title %}Login - Segra{% endblock %}
 
-{% if form.errors %}
-<p style="color:red;">Invalid credentials</p>
-{% endif %}
+{% block content %}
+<div class="flex justify-center w-full">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl">
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+        <div class="card-body">
+            <h2 class="card-title justify-center text-2xl mb-4">
+                Login to Segra
+            </h2>
 
-</body>
-</html>
+            {% if form.errors %}
+                <div class="alert alert-error text-sm mb-4">
+                    Invalid email or password.
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Email / Username</span>
+                    </label>
+                    {{ form.username }}
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label">
+                        <span class="label-text">Password</span>
+                    </label>
+                    {{ form.password }}
+                </div>
+
+                <button class="btn btn-primary w-full">
+                    Login
+                </button>
+            </form>
+
+            <p class="text-center text-sm mt-4">
+                Don’t have an account?
+                <a href="/register/" class="link link-primary">
+                    Register
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
 

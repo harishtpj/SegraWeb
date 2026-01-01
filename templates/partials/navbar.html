@@ -1,0 +1,34 @@
+<div class="navbar bg-base-100 shadow-md">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost text-xl">Segra</a>
+    </div>
+
+    <div class="flex-none gap-2">
+        <a class="btn btn-ghost" href="/">Home</a>
+	<a class="btn btn-ghost" href="{% url 'about' %}">About</a>
+
+        {% if user.is_authenticated %}
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-outline">
+                {{ user.username }}
+            </div>
+            <ul
+                tabindex="0"
+                class="dropdown-content menu bg-base-100 rounded-box shadow w-40 mt-2"
+            >
+                <li><a href="/dashboard/">Dashboard</a></li>
+                <li>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+	<a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>

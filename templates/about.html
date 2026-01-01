@@ -1,2 +1,38 @@
-<h1>About Segra</h1>
-<p>An AI-powered smart dustbin system for sustainable waste management.</p>
+{% extends "base.html" %}
+
+{% block title %}About - Segra{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-16">
+
+    <h1 class="text-4xl font-bold mb-6 text-center">
+        About Segra
+    </h1>
+
+    <p class="text-lg mb-6">
+        Segra is a smart waste segregation system designed to promote responsible
+        waste disposal using AI-powered classification and reward-based gamification.
+    </p>
+
+    <p class="mb-6">
+        Users dispose waste in a smart dustbin which automatically classifies the waste
+        and directs it to the appropriate bin. After disposal, users are rewarded with
+        <strong>EcoCoins</strong> that encourage sustainable behavior.
+    </p>
+
+    <p class="mb-6">
+        Segra also enables sustainability-focused clubs and organizations to conduct
+        <strong>EcoDrives</strong>, allowing participants to contribute more while
+        maintaining system integrity.
+    </p>
+
+    <div class="divider"></div>
+
+    <p class="text-sm text-center opacity-70">
+        Developed as part of a college project to explore AI, IoT, and web technologies
+        in building real-world sustainability solutions.
+    </p>
+
+</div>
+{% endblock %}
+

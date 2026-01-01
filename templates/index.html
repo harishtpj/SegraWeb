@@ -1,8 +1,27 @@
-<h1>Segra</h1>
-<p>Smart waste segregation with EcoCoins</p>
+{% extends "base.html" %}
 
-{% if user.is_authenticated %}
-<a href="{% url 'dashboard' %}">Dashboard</a>
-{% else %}
-<a href="{% url 'login' %}">Login</a>
-{% endif %}
+{% block title %}Home - Segra{% endblock %}
+
+{% block content %}
+<div class="hero min-h-[80vh]">
+    <div class="hero-content text-center">
+        <div class="max-w-xl">
+            <h1 class="text-5xl font-bold">Segra</h1>
+            <p class="py-6 text-lg">
+                Smart waste segregation powered by AI.
+                Dispose responsibly, earn EcoCoins, and build a sustainable future.
+            </p>
+
+            {% if user.is_authenticated %}
+	    <a href="{% url 'dashboard' %}" class="btn btn-success">
+                    Go to Dashboard
+                </a>
+            {% else %}
+	    <a href="{% url 'register' %}" class="btn btn-primary">
+                    Get Started
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

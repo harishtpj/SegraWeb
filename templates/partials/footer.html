@@ -1,0 +1,22 @@
+<footer class="footer footer-center p-6 bg-base-300 text-base-content mt-10">
+    <aside>
+        <p class="font-semibold text-lg">Segra</p>
+        <p class="text-sm">
+            Smart Waste Segregation • AI Powered • EcoCoins
+        </p>
+        <p class="text-xs opacity-70">
+            © {% now "Y" %} Segra. All rights reserved.
+        </p>
+    </aside>
+
+    <nav class="flex gap-4">
+        <a href="/" class="link link-hover">Home</a>
+	<a href="{% url 'about' %}" class="link link-hover">About</a>
+        {% if user.is_authenticated %}
+	<a href="{% url 'dashboard' %}" class="link link-hover">Dashboard</a>
+        {% else %}
+	<a href="{% url 'login' %}" class="link link-hover">Login</a>
+        {% endif %}
+    </nav>
+</footer>
+
