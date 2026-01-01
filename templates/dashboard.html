@@ -9,8 +9,7 @@
 
 <h2>Transactions</h2>
 <ul>
-{% for t in transactions %}
-  <li>{{ t.created_at }} | {{ t.waste_type }} | {{ t.coins }}</li>
-{% endfor %}
+    {% for t in transactions %}
+    <li>{{ t.created_at }} | {{ t.waste_type }} | {{ t.coins }}</li>
+    {% endfor %}
 </ul>
-
