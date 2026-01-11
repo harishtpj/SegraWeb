@@ -4,9 +4,14 @@ from django.db import models
 User = settings.AUTH_USER_MODEL
 
 class Club(models.Model):
-    name = models.CharField(max_length=100)
-    desc = models.TextField()
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_clubs")
+    created_at = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(User, blank=True, related_name="clubs")
+
+    def __str__(self):
+        return self.name
 
 class EcoDrive(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE)

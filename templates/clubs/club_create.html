@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="flex justify-center mt-10">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl font-bold mb-4 text-center">
+                Create a New Club
+            </h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">Club Name</span>
+                    </label>
+                    {{ form.name }}
+                </div>
+
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-semibold">Description</span>
+                    </label>
+                    {{ form.description }}
+                </div>
+
+                <button type="submit" class="btn btn-success w-full mt-2">
+                    Create Club
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

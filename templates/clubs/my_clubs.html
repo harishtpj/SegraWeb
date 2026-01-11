@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6 text-center">My Clubs</h1>
+
+{% if clubs %}
+<div class="grid gap-4 md:grid-cols-2">
+    {% for club in clubs %}
+    <div class="card bg-base-100 shadow-md">
+        <div class="card-body">
+            <h2 class="card-title">{{ club.name }}</h2>
+            <p class="opacity-70">{{ club.description|truncatechars:100 }}</p>
+
+            <div class="card-actions justify-end">
+                <a href="{% url 'club_detail' club.id %}" class="btn btn-primary btn-sm">View</a>
+                <a href="{% url 'club_edit' club.id %}" class="btn btn-info btn-sm">Edit</a>
+                <a href="{% url 'club_delete' club.id %}" class="btn btn-error btn-sm">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-center opacity-70">You haven't created any clubs yet.</p>
+{% endif %}
+
+{% endblock %}

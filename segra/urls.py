@@ -28,7 +28,7 @@ urlpatterns = [
     path("about/", about, name="about"),
     path("", include("accounts.urls")),
     path("", include("ecocoins.urls")),
-    path("", include("clubs.urls")),
+    path("clubs/", include("clubs.urls")),
 ]
 
 if settings.DEBUG:

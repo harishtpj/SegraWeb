@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card-body">
+        <h1 class="text-2xl font-bold">{{ club.name }}</h1>
+        <p class="opacity-70">{{ club.description }}</p>
+
+        <div class="mt-4 flex gap-2">
+            {% if is_member %}
+                <a href="{% url 'club_leave' club.id %}" class="btn btn-error btn-sm">Leave Club</a>
+            {% else %}
+                <a href="{% url 'club_join' club.id %}" class="btn btn-success btn-sm">Join Club</a>
+            {% endif %}
+
+            {% if is_admin %}
+                <a href="{% url 'club_edit' club.id %}" class="btn btn-info btn-sm">Edit</a>
+                <a href="{% url 'club_delete' club.id %}" class="btn btn-error btn-sm">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<h2 class="text-xl font-semibold mb-2">Members</h2>
+<ul class="list-disc ml-6">
+    {% for member in club.members.all %}
+        <li>
+            {{ member.get_full_name|default:member.username }}
+            {% if is_admin %}
+                <a href="{% url 'club_remove_member' club.id member.id %}" class="text-red-500 ml-2 text-xs">Remove</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+{% if is_admin %}
+<h2 class="text-xl font-semibold mt-6 mb-2">Add Member</h2>
+<form method="post" action="{% url 'club_add_member' club.id 0 %}" class="flex gap-2">
+    {% csrf_token %}
+    <input type="text" name="user_id" placeholder="User ID" class="input input-bordered w-full" required>
+    <button type="submit" class="btn btn-success btn-sm">Add</button>
+</form>
+{% endif %}
+
+{% endblock %}
