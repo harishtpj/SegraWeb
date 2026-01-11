@@ -29,7 +29,7 @@ def dashboard(req):
 
 def register(req):
     if req.method == "POST":
-        form = RegistrationForm(req.POST)
+        form = RegistrationForm(req.POST, req.FILES)
         if form.is_valid():
             form.save()
             return redirect("login")

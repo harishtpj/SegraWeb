@@ -16,3 +16,7 @@ class EcoCoinTransaction(models.Model):
     waste_type = models.CharField(max_length=20, choices=WASTE_TYPES)
     source = models.CharField(max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_credit(self):
+        return self.coins > 0

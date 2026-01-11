@@ -5,6 +5,8 @@ from django import forms
 User = get_user_model()
 
 class RegistrationForm(UserCreationForm):
+    profile_picture = forms.ImageField(required=False)
+
     first_name = forms.CharField(
             max_length=30,
             required=True,
@@ -22,7 +24,7 @@ class RegistrationForm(UserCreationForm):
     )
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "username", "email")
+        fields = ("first_name", "last_name", "username", "profile_picture", "email")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

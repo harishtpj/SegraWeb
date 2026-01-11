@@ -9,26 +9,28 @@
 
         {% if user.is_authenticated %}
         <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-outline">
-                {{ user.first_name }}
-            </div>
-            <ul
-                tabindex="0"
-                class="dropdown-content menu bg-base-100 rounded-box shadow w-40 mt-2"
-            >
-                <li><a href="/dashboard/">Dashboard</a></li>
+            <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                <div class="w-10 rounded-full">
+                    {% if user.profile_photo %}
+                        <img src="{{ user.profile_photo.url }}" />
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=10b981&color=fff" />
+                    {% endif %}
+                </div>
+            </label>
+
+            <ul tabindex="0" class="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                 <li>
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button type="submit" class="w-full text-left">
-                            Logout
-                        </button>
+                        <button type="submit" class="w-full text-left">Logout</button>
                     </form>
                 </li>
             </ul>
         </div>
         {% else %}
-	<a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+        <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
         {% endif %}
     </div>
 </div>
