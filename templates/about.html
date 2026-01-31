@@ -1,38 +1,42 @@
 {% extends "base.html" %}
-
 {% block title %}About - Segra{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto py-16">
+<section class="bg-base-100 rounded-box shadow-lg p-6 md:p-10 mb-8">
+  <h1 class="text-2xl md:text-3xl font-bold text-primary mb-4">About Segra</h1>
+  <p class="text-base-content/80 leading-relaxed">
+    Segra is a sustainability-driven platform designed to encourage eco-friendly
+    behavior through transparent rewards and community collaboration.
+  </p>
+</section>
 
-    <h1 class="text-4xl font-bold mb-6 text-center">
-        About Segra
-    </h1>
+<section class="grid gap-6 md:grid-cols-2 mb-10">
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <h2 class="card-title">Our Mission</h2>
+      <p>
+        To promote sustainable practices by rewarding positive environmental
+        actions and fostering collaborative communities.
+      </p>
+    </div>
+  </div>
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <h2 class="card-title">How It Works</h2>
+      <ul class="list-disc list-inside space-y-2">
+        <li>Users earn EcoCoins through sustainable actions</li>
+        <li>Clubs coordinate collective efforts</li>
+        <li>All transactions are transparent and traceable</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-    <p class="text-lg mb-6">
-        Segra is a smart waste segregation system designed to promote responsible
-        waste disposal using AI-powered classification and reward-based gamification.
-    </p>
-
-    <p class="mb-6">
-        Users dispose waste in a smart dustbin which automatically classifies the waste
-        and directs it to the appropriate bin. After disposal, users are rewarded with
-        <strong>EcoCoins</strong> that encourage sustainable behavior.
-    </p>
-
-    <p class="mb-6">
-        Segra also enables sustainability-focused clubs and organizations to conduct
-        <strong>EcoDrives</strong>, allowing participants to contribute more while
-        maintaining system integrity.
-    </p>
-
-    <div class="divider"></div>
-
-    <p class="text-sm text-center opacity-70">
-        Developed as part of a college project to explore AI, IoT, and web technologies
-        in building real-world sustainability solutions.
-    </p>
-
-</div>
+<section class="bg-base-200 rounded-box p-8">
+  <h2 class="text-2xl font-semibold mb-3">Why Segra?</h2>
+  <p class="text-base-content/80">
+    Unlike traditional reward systems, Segra focuses on measurable impact,
+    community trust, and long-term environmental value.
+  </p>
+</section>
 {% endblock %}
-

@@ -1,52 +1,65 @@
 {% extends "base.html" %}
-
 {% block title %}Login - Segra{% endblock %}
 
 {% block content %}
-<div class="flex justify-center w-full">
-    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+<div class="flex items-center justify-center min-h-[80vh] px-4">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-2xl font-bold text-center text-primary">♻️ Welcome Back</h1>
+      <p class="text-center text-sm opacity-80 mb-4">
+        Continue making sustainable impact
+      </p>
 
-        <div class="card-body">
-            <h2 class="card-title justify-center text-2xl mb-4">
-                Login to Segra
-            </h2>
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
 
-            {% if form.errors %}
-                <div class="alert alert-error text-sm mb-4">
-                    Invalid email or password.
-                </div>
-            {% endif %}
+        {# Non-field errors (e.g. invalid login) #}
+        {% if form.non_field_errors %}
+          <div class="alert alert-error text-sm">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
 
-            <form method="post">
-                {% csrf_token %}
-
-                <div class="form-control mb-4">
-                    <label class="label">
-                        <span class="label-text">Email / Username</span>
-                    </label>
-                    {{ form.username }}
-                </div>
-
-                <div class="form-control mb-6">
-                    <label class="label">
-                        <span class="label-text">Password</span>
-                    </label>
-                    {{ form.password }}
-                </div>
-
-                <button class="btn btn-primary w-full">
-                    Login
-                </button>
-            </form>
-
-            <p class="text-center text-sm mt-4">
-                Don’t have an account?
-                <a href="/register/" class="link link-primary">
-                    Register
-                </a>
-            </p>
+        {# Username field #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.username.label }}</span>
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.username.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
         </div>
+
+        {# Password field #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.password.label }}</span>
+          </label>
+          {{ form.password }}
+          {% if form.password.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.password.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">
+          Login
+        </button>
+      </form>
+
+      <p class="text-sm text-center mt-4">
+        Don't have an account?
+        <a href="{% url 'register' %}" class="link link-primary">Create one</a>
+      </p>
     </div>
+  </div>
 </div>
 {% endblock %}
-

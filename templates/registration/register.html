@@ -1,46 +1,143 @@
 {% extends "base.html" %}
-
 {% block title %}Register - Segra{% endblock %}
 
 {% block content %}
-<div class="flex justify-center w-full">
-    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+<div class="flex items-center justify-center min-h-[85vh] px-4">
+  <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-2xl font-bold text-center text-primary">♻️ Join Segra</h1>
+      <p class="text-center text-sm opacity-80 mb-6">
+        Create your account and start earning EcoCoins
+      </p>
 
-        <div class="card-body">
-            <h2 class="card-title justify-center text-2xl mb-4">
-                Create an Account
-            </h2>
+      <form method="post" enctype="multipart/form-data"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% csrf_token %}
 
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+        {# Non-field errors (password mismatch, etc.) #}
+        {% if form.non_field_errors %}
+          <div class="md:col-span-2 alert alert-error text-sm">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
 
-                {% for field in form %}
-                    <div class="form-control mb-4">
-                        <label class="label">
-                            <span class="label-text">{{ field.label }}</span>
-                        </label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <p class="text-error text-sm mt-1">
-                                {{ field.errors|striptags }}
-                            </p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                <button class="btn btn-success w-full mt-2">
-                    Register
-                </button>
-            </form>
-
-            <p class="text-center text-sm mt-4">
-                Already have an account?
-		<a href="{% url 'login' %}" class="link link-primary">
-                    Login
-                </a>
-            </p>
+        {# First name #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.first_name.label }}</span>
+          </label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.first_name.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
         </div>
+
+        {# Last name #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.last_name.label }}</span>
+          </label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.last_name.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        {# Username #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.username.label }}</span>
+          </label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.username.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        {# Email #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.email.label }}</span>
+          </label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.email.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        {# Profile picture #}
+        <div class="form-control md:col-span-2">
+          <label class="label">
+            <span class="label-text">Profile Photo</span>
+          </label>
+          {{ form.profile_photo }}
+          {% if form.profile_photo.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.profile_photo.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        {# Password #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.password1.label }}</span>
+          </label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.password1.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        {# Confirm password #}
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">{{ form.password2.label }}</span>
+          </label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">
+                {{ form.password2.errors|striptags }}
+              </span>
+            </label>
+          {% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+          <button type="submit" class="btn btn-primary w-full">
+            Create Account
+          </button>
+        </div>
+      </form>
+
+      <p class="text-sm text-center mt-4">
+        Already have an account?
+        <a href="{% url 'login' %}" class="link link-primary">Login</a>
+      </p>
     </div>
+  </div>
 </div>
 {% endblock %}
-

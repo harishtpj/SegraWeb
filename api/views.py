@@ -10,13 +10,13 @@ def credit(req):
             'error': 'POST only!'
         }, status=400)
 
-        user = User.objects.get(id=req.POST['user_id'])
-        coins = int(req.POST['coins'])
+    user = User.objects.get(id=req.POST['user_id'])
+    coins = int(req.POST['coins'])
 
-        if not can_credit(coins):
-            return JsonResponse({
-                'error': 'Daily Limit Exceeded'
-            }, status=403)
+    if not can_credit(req.user, coins):
+        return JsonResponse({
+            'error': 'Daily Limit Exceeded'
+        }, status=403)
 
-        credit_ecocoins(user, coins, req.POST['waste_type'])
-        return JsonResponse({'status': 'success'})
+    credit_ecocoins(user, coins, req.POST['waste_type'])
+    return JsonResponse({'status': 'success'})

@@ -1,42 +1,98 @@
-<div class="navbar bg-base-100 shadow-md">
+<nav class="navbar bg-base-100 shadow-md px-4 relative z-50">
+    <!-- Logo -->
     <div class="flex-1">
-        <a href="/" class="btn btn-ghost text-xl">Segra</a>
+        <a href="{% url 'index' %}" class="flex items-center gap-2 text-xl font-bold text-primary">
+            ♻️ Segra
+        </a>
     </div>
 
-    <div class="flex-none gap-2">
-        <a class="btn btn-ghost" href="/">Home</a>
-	<a class="btn btn-ghost" href="{% url 'about' %}">About</a>
+    <!-- Mobile Menu -->
+    <div class="md:hidden dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </label>
+
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-[1000]">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'club_list' %}">Clubs</a></li>
+
+            <li class="my-1">
+                <div class="h-px bg-base-300 opacity-60"></div>
+            </li>
+
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full text-left">
+                        Logout
+                    </button>
+                </form>
+            </li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Get Started</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center gap-4">
+        <ul class="menu menu-horizontal font-medium">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'club_list' %}">Clubs</a></li>
+            {% endif %}
+        </ul>
 
         {% if user.is_authenticated %}
-    <div class="flex-none gap-2">
-        <a class="btn btn-ghost" href="{% url 'club_list' %}">Clubs</a>
-    </div>
+        <!-- Profile Avatar Dropdown -->
         <div class="dropdown dropdown-end">
             <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                <div class="w-10 rounded-full">
+                <div class="w-9 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     {% if user.profile_photo %}
-                        <img src="{{ user.profile_photo.url }}" />
+                    <img src="{{ user.profile_photo.url }}" alt="Profile" />
                     {% else %}
-                        <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=10b981&color=fff" />
+                    <span class="flex items-center justify-center h-full w-full bg-primary text-primary-content">
+                        ♻️
+                    </span>
                     {% endif %}
                 </div>
             </label>
 
-            <ul tabindex="0" class="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'my_clubs' %}">My Clubs</a></li>
+            <ul tabindex="0"
+                class="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-48 z-[1000]">
 
+                <li class="px-3 py-1 text-sm opacity-70">
+                    {{ user.get_full_name|default:user.username }}
+                </li>
+
+                <!-- Thin divider -->
+                <li class="my-1">
+                    <div class="h-px bg-base-300 opacity-60"></div>
+                </li>
+
+                <li>
                     <form method="post" action="{% url 'logout' %}">
-                        <li>
-                            {% csrf_token %}
-                        <button type="submit" class="w-full text-left">Logout</button>
-                        </li>
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left">
+                            Logout
+                        </button>
                     </form>
-
+                </li>
             </ul>
         </div>
         {% else %}
-        <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+        <a href="{% url 'login' %}" class="btn btn-ghost">Login</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
         {% endif %}
     </div>
-</div>
+</nav>

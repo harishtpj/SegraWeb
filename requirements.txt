@@ -2,5 +2,4 @@ Django
 Pillow
 dj-database-url
 mysqlclient
-django-storages
-azure-storage-blob
+whitenoise

@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F, Sum
 from django.utils import timezone
 from .models import EcoCoinTransaction
 from clubs.models import EcoDrive
@@ -10,7 +10,7 @@ def can_credit(user, coins):
     today_total = EcoCoinTransaction.objects.filter(
             user = user,
             created_at__date = timezone.now().date()
-    ).aggregate(total = models.Sum('coins'))['total'] or 0
+    ).aggregate(total = Sum('coins'))['total'] or 0
 
     active_drive = EcoDrive.objects.filter(
             participants = user,
