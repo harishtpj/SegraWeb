@@ -76,11 +76,11 @@ def club_leave(req, pk):
     return redirect("club_detail", pk=pk)
 
 @login_required
-def club_add_member(request, pk, user_id):
+def club_add_member(request, pk):
     club = get_object_or_404(Club, pk=pk)
     if request.user != club.created_by:
         return redirect("club_detail", pk=pk)
-    user = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(User, pk=request.POST['user_id'])
     club.members.add(user)
     return redirect("club_detail", pk=pk)
 

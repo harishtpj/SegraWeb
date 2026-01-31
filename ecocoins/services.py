@@ -23,6 +23,10 @@ def can_credit(user, coins):
 
     return today_total + coins <= DAILY_LIMIT
 
+def calculate_points(disposal_data, user):
+    # TODO: Implement actual logic based on waste type and weight
+    return 10
+
 @transaction.atomic
 def credit_ecocoins(user, coins, waste_type, source="bin"):
     EcoCoinTransaction.objects.create(

@@ -29,6 +29,7 @@ urlpatterns = [
     path("", include("accounts.urls")),
     path("", include("ecocoins.urls")),
     path("clubs/", include("clubs.urls")),
+    path("api/", include("api.urls")),
 ]
 
 if settings.DEBUG:

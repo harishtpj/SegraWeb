@@ -3,3 +3,4 @@ Pillow
 dj-database-url
 mysqlclient
 whitenoise
+djangorestframework

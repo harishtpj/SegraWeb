@@ -35,7 +35,7 @@
 
 {% if is_admin %}
 <h2 class="text-xl font-semibold mt-6 mb-2">Add Member</h2>
-<form method="post" action="{% url 'club_add_member' club.id 0 %}" class="flex gap-2">
+<form method="post" action="{% url 'club_add_member' club.id %}" class="flex gap-2">
     {% csrf_token %}
     <input type="text" name="user_id" placeholder="User ID" class="input input-bordered w-full" required>
     <button type="submit" class="btn btn-success btn-sm">Add</button>
