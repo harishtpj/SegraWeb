@@ -1,12 +1,12 @@
 from django.http import FileResponse, Http404
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 User = get_user_model()
 
 class UserFaceView(APIView):
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [AllowAny] 
 
     def get(self, request, user_id):
         try:
