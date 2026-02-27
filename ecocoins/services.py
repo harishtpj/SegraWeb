@@ -1,16 +1,31 @@
 from django.db import transaction
-from django.db.models import F, Sum
+from django.db.models import F, Count
 from django.utils import timezone
 from .models import EcoCoinTransaction
 from clubs.models import EcoDrive
 
-DAILY_LIMIT = 20
+DAILY_LIMIT = 20  # Max 20 disposals per day
+
+# Points per waste type (base points)
+WASTE_POINTS = {
+    'plastic': 10,
+    'metal': 15,
+    'bio': 5,
+    'organic': 5,  # Handle both 'organic' and 'bio'
+    'ewaste': 20,
+}
 
 def can_credit(user, coins):
-    today_total = EcoCoinTransaction.objects.filter(
+    """
+    Check if user can make a disposal today.
+    Limit: 20 disposals per day (not points).
+    No limit during active EcoDrive.
+    """
+    # Count disposals today
+    today_count = EcoCoinTransaction.objects.filter(
             user = user,
             created_at__date = timezone.now().date()
-    ).aggregate(total = Sum('coins'))['total'] or 0
+    ).count()
 
     active_drive = EcoDrive.objects.filter(
             participants = user,
@@ -21,11 +36,24 @@ def can_credit(user, coins):
     if active_drive:
         return True
 
-    return today_total + coins <= DAILY_LIMIT
+    # Allow if less than 20 disposals today
+    return today_count < DAILY_LIMIT
 
-def calculate_points(disposal_data, user):
-    # TODO: Implement actual logic based on waste type and weight
-    return 10
+def calculate_points(waste_type, weight=1.0):
+    """
+    Calculate points based on waste type and optional weight.
+    Weight is a multiplier (default 1.0 for single item).
+    """
+    # Normalize waste type
+    waste_type = waste_type.lower().strip()
+    
+    base_points = WASTE_POINTS.get(waste_type, 0)
+    
+    # Bonus for larger quantities
+    if weight and weight > 1.0:
+        base_points = int(base_points * weight)
+    
+    return base_points
 
 @transaction.atomic
 def credit_ecocoins(user, coins, waste_type, source="bin"):

@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from accounts.models import User
 from api.serializers import UserListSerializer
+from rest_framework.response import Response
+
 User = get_user_model()
 
 class UserFaceView(APIView):

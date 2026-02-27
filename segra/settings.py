@@ -27,7 +27,7 @@ SECRET_KEY = "django-insecure-x*^*rltougju9j2x(1lgmy+j-vy7-vz8e^1uwx*dr*9g&z34bg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "segra.pythonanywhere.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "segra.pythonanywhere.com", "localhost:8000", "127.0.0.1:8000"]
 
 
 # Application definition
@@ -149,3 +149,17 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
 }
+
+# CSRF and Security Configuration for Development
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to access CSRF token
+CSRF_COOKIE_SAMESITE = 'Lax'  # Allow form submissions from same site
+
+# Trust requests from Flask app and local development
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5001",
+    "http://127.0.0.1:5001",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]

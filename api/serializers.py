@@ -14,6 +14,6 @@ class UserListSerializer(serializers.ModelSerializer):
     has_photo = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ["username", "has_photo"]
+        fields = ["id","username", "has_photo"]
     def get_has_photo(self, obj):
         return bool(obj.profile_photo)
