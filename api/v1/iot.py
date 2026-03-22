@@ -1,48 +1,71 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-from django.contrib.auth import get_user_model
-User = get_user_model()
 from api.auth import SmartBinAuthentication
 from api.permissions import IsSmartBin
-from api.serializers import IdentifySerializer, DisposeSerializer
+from api.serializers import DisposeSerializer
 from accounts.models import User
 from ecocoins.services import credit_ecocoins, can_credit, calculate_points
+from api.vision import VisionServiceError, identify_user_from_face, classify_waste_image
 
 
-# NOTE: IdentifyUserView is deprecated - face recognition is handled by Flask app (getimgfromesp.py)
-# The Flask app identifies the user and calls DisposeWasteView with user_id and waste_type
-# class IdentifyUserView(APIView):
-#     authentication_classes = [SmartBinAuthentication]
-#     permission_classes = [IsSmartBin]
-# 
-#     def post(self, request):
-#         serializer = IdentifySerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = recognize_user(serializer.validated_data["face_encoding"])
-#         if not user:
-#             return Response(
-#                 {"error": "User not recognized"},
-#                 status=status.HTTP_404_NOT_FOUND
-#             )
-#         return Response({
-#             "user_id": user.id,
-#             "name": user.get_full_name(),
-#         })
-
-
-class DisposeWasteView(APIView):
-    permission_classes = [AllowAny]
+class IdentifyUserView(APIView):
+    authentication_classes = [SmartBinAuthentication]
+    permission_classes = [IsSmartBin]
 
     def post(self, request):
-        serializer = DisposeSerializer(data=request.data)
+        if not request.body:
+            return Response(
+                {"error": "Raw image bytes required in request body"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            match = identify_user_from_face(request.body)
+        except VisionServiceError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not match:
+            return Response(
+                {
+                    "status": "unknown",
+                    "message": "User not recognized"
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        user, confidence = match
+        return Response(
+            {
+                "status": "success",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "name": user.get_full_name(),
+                },
+                "confidence": confidence,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+class DisposeWasteView(APIView):
+    authentication_classes = [SmartBinAuthentication]
+    permission_classes = [IsSmartBin]
+
+    def post(self, request):
+        serializer = DisposeSerializer(data=request.query_params)
         if not serializer.is_valid():
             return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         user_id = serializer.validated_data.get("user_id")
-        waste_type = serializer.validated_data.get("waste_type")
+        waste_image = request.body
         weight = serializer.validated_data.get("weight", 1.0)
+
+        if not waste_image:
+            return Response(
+                {"error": "Raw image bytes required in request body"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             user = User.objects.get(id=user_id)
@@ -50,6 +73,14 @@ class DisposeWasteView(APIView):
             return Response(
                 {"error": "User not found"}, 
                 status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            waste_type = classify_waste_image(waste_image)
+        except VisionServiceError as exc:
+            return Response(
+                {"error": str(exc)},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
         # Calculate points based on waste type and weight

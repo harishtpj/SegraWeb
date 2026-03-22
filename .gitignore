@@ -1,14 +1,12 @@
-
 __pycache__/
 *.py[cod]
-
 .venv/
 venv/
-
+.env
+.env.*
 db.sqlite3
-
 media/
 static/
-
+backups/
 .DS_Store
 Thumbs.db
