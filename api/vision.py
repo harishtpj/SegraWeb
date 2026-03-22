@@ -1,9 +1,9 @@
 import base64
 import binascii
-import os
 from typing import Optional, Tuple, Union
 
 from ml_models.face_utils import recognize_face_from_db, FaceRecognitionError
+from ml_models.waste_classifier import classify_waste_from_bytes, WasteClassificationError
 
 
 class VisionServiceError(Exception):
@@ -39,12 +39,8 @@ def identify_user_from_face(face_image: Union[str, bytes, bytearray], threshold:
 
 
 def classify_waste_image(waste_image: Union[str, bytes, bytearray]) -> str:
-    _get_image_bytes(waste_image)
-
-    override_type = os.getenv("DEFAULT_WASTE_TYPE")
-    if override_type:
-        return override_type.strip().lower()
-
-    raise VisionServiceError(
-        "Waste classification backend is not configured. Set DEFAULT_WASTE_TYPE for now or integrate OpenAI classifier."
-    )
+    image_bytes = _get_image_bytes(waste_image)
+    try:
+        return classify_waste_from_bytes(image_bytes)
+    except WasteClassificationError as exc:
+        raise VisionServiceError(str(exc)) from exc
