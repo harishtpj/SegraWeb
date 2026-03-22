@@ -1,11 +1,9 @@
 import base64
 import binascii
-import hashlib
-import math
 import os
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
-from accounts.models import UserFaceEmbedding
+from ml_models.face_utils import recognize_face_from_db, FaceRecognitionError
 
 
 class VisionServiceError(Exception):
@@ -32,42 +30,12 @@ def _get_image_bytes(image_data: Union[str, bytes, bytearray]) -> bytes:
         raise VisionServiceError("Invalid base64 image payload")
 
 
-def build_embedding(image_data: Union[str, bytes, bytearray]) -> List[float]:
-    image_bytes = _get_image_bytes(image_data)
-    digest = hashlib.sha256(image_bytes).digest()
-    return [round(value / 255.0, 6) for value in digest]
-
-
-def _cosine_similarity(vec_a: List[float], vec_b: List[float]) -> float:
-    if len(vec_a) != len(vec_b):
-        return -1.0
-
-    dot_product = sum(a * b for a, b in zip(vec_a, vec_b))
-    norm_a = math.sqrt(sum(a * a for a in vec_a))
-    norm_b = math.sqrt(sum(b * b for b in vec_b))
-
-    if norm_a == 0 or norm_b == 0:
-        return -1.0
-
-    return dot_product / (norm_a * norm_b)
-
-
 def identify_user_from_face(face_image: Union[str, bytes, bytearray], threshold: float = 0.90) -> Optional[Tuple[object, float]]:
-    incoming_embedding = build_embedding(face_image)
-
-    best_user = None
-    best_score = -1.0
-
-    for face_record in UserFaceEmbedding.objects.select_related("user").all():
-        score = _cosine_similarity(incoming_embedding, face_record.embedding)
-        if score > best_score:
-            best_score = score
-            best_user = face_record.user
-
-    if best_user is None or best_score < threshold:
-        return None
-
-    return best_user, round(best_score, 4)
+    image_bytes = _get_image_bytes(face_image)
+    try:
+        return recognize_face_from_db(image_bytes, threshold=threshold)
+    except FaceRecognitionError as exc:
+        raise VisionServiceError(str(exc)) from exc
 
 
 def classify_waste_image(waste_image: Union[str, bytes, bytearray]) -> str:

@@ -4,3 +4,7 @@ dj-database-url
 mysqlclient
 whitenoise
 djangorestframework
+numpy
+torch
+torchvision
+facenet-pytorch
